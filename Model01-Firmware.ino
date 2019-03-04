@@ -2,10 +2,11 @@
 
 #include <Kaleidoscope.h>
 #include <Kaleidoscope-LEDControl.h>
+#include <Kaleidoscope-LED-ActiveLayerColor.h>
 
 #define Key_Underscore LSHIFT(Key_Minus)
 
-enum { LAYER_PRIMARY, LAYER_SECONDARY };
+enum { LAYER_PRIMARY, LAYER_FACTORIO, LAYER_SECONDARY };
 
 // *INDENT-OFF*
 KEYMAPS(
@@ -17,11 +18,26 @@ KEYMAPS(
    Key_LeftControl, Key_Backspace, Key_Delete, Key_LeftGui,
    ShiftToLayer(LAYER_SECONDARY),
 
-   Key_RightBracket,      Key_6, Key_7, Key_8,     Key_9,         Key_0,         ___,
+   Key_RightBracket,      Key_6, Key_7, Key_8,     Key_9,         Key_0,         LockLayer(LAYER_FACTORIO),
    Key_RightParen,        Key_Y, Key_U, Key_I,     Key_O,         Key_P,         Key_Equals,
                           Key_H, Key_J, Key_K,     Key_L,         Key_Semicolon, Key_Quote,
    Key_RightCurlyBracket, Key_N, Key_M, Key_Comma, Key_Period,    Key_Slash,     Key_Backslash,
    Key_LeftAlt, Key_Enter, Key_Spacebar, Key_RightControl,
+   Key_RightShift),
+
+  [LAYER_FACTORIO] =  KEYMAP_STACKED
+  (___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, Key_LeftShift, ___, ___, ___, ___,
+   Key_LeftAlt, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
+   ___,
+
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+        ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___, ___, ___, ___,
+   ___, ___, ___, ___,
    Key_RightShift),
 
   [LAYER_SECONDARY] =  KEYMAP_STACKED
@@ -41,10 +57,16 @@ KEYMAPS(
 )
 // *INDENT-ON*
 
-KALEIDOSCOPE_INIT_PLUGINS(LEDControl, LEDOff);
+KALEIDOSCOPE_INIT_PLUGINS(LEDControl, LEDActiveLayerColorEffect);
 
 void setup() {
+  static const cRGB layerColormap[] PROGMEM = {
+    CRGB(30, 30, 30),
+    CRGB(160, 90, 26),
+    CRGB(60, 60, 60),
+  };
   Kaleidoscope.setup();
+  LEDActiveLayerColorEffect.setColormap(layerColormap);
 }
 
 void loop() {
